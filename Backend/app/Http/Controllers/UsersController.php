@@ -13,7 +13,7 @@ class UsersController extends Controller
     {
         return $this->success([
             'user' => $request->user(),
-            'token' => $request->user()->createToken('auth-token')->plainTextToken // temp token for testing api
+            'token' => $request->user()->createToken('auth-token')->plainTextToken // temp token for testing api (delete after finishing)
             // 'token' => $request->bearerToken()
         ]);
     }

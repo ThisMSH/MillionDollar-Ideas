@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostsRequest;
 use App\Http\Resources\PostsResource;
 use App\Models\Posts;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -12,57 +14,53 @@ use MailPoet\API\JSON\Response;
 
 class PostsController extends Controller
 {
+    use HttpResponses;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // return Posts::all();
-        return PostsResource::collection(
-            Posts::where('User_id', 1)->get()
+        return $this->success(
+            PostsResource::collection(
+                Posts::with('category', 'user')->get()
+            )
         );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostsRequest $request)
     {
-        $request->validate([
-            'Title' => ['required', 'string', 'max:255'],
-            'Created_by' => ['required', 'string', 'max:255'],
-            'Topic' => ['required', 'string', 'max:2000'],
-            'Image' => ['image', 'mimes:png,jpeg,jpg', 'max:2048'],
-        ]);
+        $request->validated($request->all());
         
         // Image name
         $imageName = time() . "-" . Str::random(5) . "." . $request->Image->getClientOriginalExtension();
-        // $request->image->move(dirname(base_path()) . '\Front-end\src\assets\uploads', $image);
+        // $request->Image->move(dirname(base_path()) . '\Front-end\src\assets\uploads', $image); // To move the uploaded image to the frontend (bad method)
         
         // ID of the user
         $data = $request->all();
-        $data['User_id'] = "55";
+        // $data['User_id'] = Auth::id();
+        $data['User_id'] = "1";
         $request->merge($data);
+        // dump($request);
+
+        new PostsResource(Posts::create($request->all()));
+        Storage::disk('public')->put($imageName, file_get_contents($request->Image));
+        return "success";
         
-        try {
-            // Moving the image inside storage/app/public folder
-            // Storage::disk('public')->put($imageName, file_get_contents($request->Image));
-            Posts::create($request->all());
-            return "success";
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error occurred: ' . $e->getMessage(),
-                'status' => false,
-            ], 500);
-        }
+        // try {
+        //     // Moving the image inside storage/app/public folder
+        //     // Storage::disk('public')->put($imageName, file_get_contents($request->Image));
+        //     // Posts::create($request->all());
+        //     return "success";
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'message' => 'Error occurred: ' . $e->getMessage(),
+        //         'status' => false,
+        //     ], 500);
+        // }
     }
 
     /**

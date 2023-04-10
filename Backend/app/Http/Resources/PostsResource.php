@@ -17,6 +17,16 @@ class PostsResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => (string)$this->id,
+            'attributes' => [
+                'title' => $this->Title,
+                'topic' => $this->Topic,
+                'image' => $this->Image,
+                'created_at' => $this->created_at
+            ],
+            'relationships' => [
+                'creator' => $this->user->name,
+                'category' => $this->category->Category
+            ]
         ];
     }
 }
