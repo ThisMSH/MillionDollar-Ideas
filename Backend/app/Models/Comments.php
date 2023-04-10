@@ -18,14 +18,14 @@ class Comments extends Model
     ];
 
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'User_id');
     }
 
     public function post() {
-        return $this->belongsTo(Posts::class);
+        return $this->belongsTo(Posts::class, 'Post_id');
     }
 
     public function likes() {
-        return $this->hasMany(Likes::class);
+        return $this->hasMany(Likes::class, 'Comment_id');
     }
 }

@@ -46,14 +46,14 @@ class User extends Authenticatable
     ];
 
     public function posts() {
-        return $this->hasMany(Posts::class);
+        return $this->hasMany(Posts::class, 'User_id');
     }
 
     public function comments() {
-        return $this->hasMany(Comments::class);
+        return $this->hasMany(Comments::class, 'User_id');
     }
 
     public function likes() {
-        return $this->hasMany(Likes::class);
+        return $this->hasMany(Likes::class, 'User_id');
     }
 }

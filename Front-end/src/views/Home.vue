@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
+import { usePostsStore } from '../stores/posts';
 import Post from "../components/Post.vue";
 import Welcome from '../components/Welcome.vue';
 
@@ -14,6 +15,7 @@ const posts = ref([
 ]);
 
 const authStore = useAuthStore();
+const postss = usePostsStore();
 
 onMounted(async () => {
   await authStore.getUser();

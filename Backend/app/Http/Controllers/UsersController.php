@@ -11,10 +11,11 @@ class UsersController extends Controller
 
     public function show(Request $request)
     {
-        return $this->success([
-            'user' => $request->user(),
-            'token' => $request->user()->createToken('auth-token')->plainTextToken // temp token for testing api (delete after finishing)
-            // 'token' => $request->bearerToken()
-        ]);
+        return $this->success($request->user());
+        // return $this->success([
+        //     'user' => $request->user(),
+        //     'token' => $request->user()->createToken('auth-token')->plainTextToken // temp token for testing api (delete after finishing)
+        //     // 'token' => $request->bearerToken()
+        // ]);
     }
 }

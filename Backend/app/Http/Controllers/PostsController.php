@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostsRequest;
+use App\Http\Requests\UpdatePostsRequest;
+use App\Http\Resources\CommentsResource;
 use App\Http\Resources\PostsResource;
 use App\Models\Posts;
 use App\Traits\HttpResponses;
@@ -36,68 +38,95 @@ class PostsController extends Controller
         $request->validated($request->all());
         
         // Image name
-        $imageName = time() . "-" . Str::random(5) . "." . $request->Image->getClientOriginalExtension();
-        // $request->Image->move(dirname(base_path()) . '\Front-end\src\assets\uploads', $image); // To move the uploaded image to the frontend (bad method)
-        
-        // ID of the user
-        $data = $request->all();
-        // $data['User_id'] = Auth::id();
-        $data['User_id'] = "1";
-        $request->merge($data);
-        // dump($request);
+        if ($request->hasFile('Image')) {
+            $imageName = "posts/" . time() . "-" . Str::random(5) . "." . $request->Image->getClientOriginalExtension();
 
-        new PostsResource(Posts::create($request->all()));
-        Storage::disk('public')->put($imageName, file_get_contents($request->Image));
-        return "success";
+            // $request->Image->move(dirname(base_path()) . '\Front-end\src\assets\uploads', $image); // To move the uploaded image to the frontend (bad method)
+            Storage::disk('public')->put($imageName, file_get_contents($request->Image)); // Saving the image in the storage folder server side
+        } else {
+            $imageName = "";
+        }
         
-        // try {
-        //     // Moving the image inside storage/app/public folder
-        //     // Storage::disk('public')->put($imageName, file_get_contents($request->Image));
-        //     // Posts::create($request->all());
-        //     return "success";
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'message' => 'Error occurred: ' . $e->getMessage(),
-        //         'status' => false,
-        //     ], 500);
-        // }
+        // Insert ID of the user
+        // $data = $request->all();
+        // $data['User_id'] = Auth::id();
+        // $request->merge($data);
+        
+        $post = Posts::create([
+            'Title' => $request->Title,
+            'Topic' => $request->Topic,
+            'Image' => $imageName,
+            'Category_id' => $request->Category_id,
+            'User_id' => Auth::id(),
+        ]);
+
+        return $this->success(new PostsResource($post));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Posts $posts)
+    public function show(Posts $post)
     {
-        return $posts;
+        $comments = $post->comments()->with('user')->orderByDesc('id')->get();
+        
+        return $this->success([
+            'post' => new PostsResource($post),
+            'comments' => CommentsResource::collection($comments)
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display all posts of a specific category.
      */
-    public function edit(Posts $posts)
+    public function filter($id)
     {
-        //
+        return $this->success(
+            PostsResource::collection(
+                Posts::with('category', 'user')->where('Category_id', $id)->get()
+            )
+        );
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Posts $posts)
+    public function update(UpdatePostsRequest $request, Posts $post)
     {
-        $request->validate([
-            'Title' => ['string', 'max:255'],
-            'Created_by' => ['string', 'max:255'],
-            'Topic' => ['string', 'max:2000']
-        ]);
+        if (Auth::user()->id != $post->User_id) {
+            return $this->error('', 'You are not authorized to make this request.', 403);
+        }
 
-        return $posts->update($request->all());
+        $request->validated($request->all());
+
+        $post->update($request->all());
+
+        return $this->success(new PostsResource($post));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Posts $posts)
+    public function destroy(Posts $post)
     {
-        //
+        return $this->userNotAuthorized($post) ? $this->userNotAuthorized($post) : $post->delete();
+    }
+
+    /**
+     * Search for a specific post.
+     */
+    public function search($search)
+    {
+        // dump($request);
+        $search = Posts::where('Title', 'LIKE', '%' . $search . '%')->get();
+
+        return $this->success($search);
+    }
+
+    private function userNotAuthorized($post)
+    {
+        if (Auth::user()->id != $post->User_id) {
+            return $this->error('', 'You are not authorized to make this request.', 403);
+        }
     }
 }

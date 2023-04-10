@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import Signin from './modal/Signin.vue';
 import Signup from './modal/Signup.vue';
