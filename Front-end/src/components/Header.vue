@@ -53,6 +53,8 @@ onMounted(() => {
       }
     }
   });
+
+//   await authStore.getUser();
 });
 </script>
 

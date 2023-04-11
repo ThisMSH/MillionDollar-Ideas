@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->group(function () {
     // User info
     Route::get('/user', [UsersController::class, 'show']);
-
+    
     // Posts
     Route::post('/posts', [PostsController::class, 'store']);
     Route::patch('/posts/{post}', [PostsController::class, 'update']);
@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/comment/{comment}', [CommentsController::class, 'update']);
     Route::delete('/comment/{comment}', [CommentsController::class, 'destroy']);
 });
+
 
 // Posts
 Route::get('/posts', [PostsController::class, 'index']);

@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(["title", "topic", "categories"]);
+const props = defineProps(["title", "topic", "category", "creator"]);
 </script>
 
 <template>
@@ -10,14 +10,12 @@ const props = defineProps(["title", "topic", "categories"]);
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ title }}</h5>
       </div>
       <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 line-clamp-3">{{ topic }}</p>
-      <div class="flex justify-between">
+      <div class="flex flex-row-reverse justify-between">
         <div class="inline-block">
-          <span v-for="category in categories" class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">{{ category.CategoryID }}</span>
+          <span class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">{{ category }}</span>
         </div>
         <div class="inline-block text-xs text-gray-700 dark:text-gray-400">
-          <span><font-awesome-icon icon="fa-solid fa-thumbs-up" /> 132 Likes</span>
-          <span> - </span>
-          <span><font-awesome-icon icon="fa-solid fa-comment" /> 3 Comments</span>
+          <p>Created by: {{ creator }}</p>
         </div>
       </div>
     </div>
