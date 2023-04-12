@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import { usePostsStore } from "./posts";
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
@@ -19,9 +18,6 @@ export const useAuthStore = defineStore("auth", {
             await this.getToken();
             const userData = await axios.get("/api/user");
             this.authUser = userData.data.data;
-            document.addEventListener("DOMContentLoaded", function(event) {
-                document.getElementById('defaultModalButton').click();
-            });
         },
         async handleLogin(data) {
             this.authErrors = [];
@@ -37,8 +33,6 @@ export const useAuthStore = defineStore("auth", {
                 // this.router.push("/");
                 const closeButton = document.querySelector('#login-model [data-modal-hide]');
                 closeButton.click();
-                const postsStore = usePostsStore();
-                await postsStore.getAllPosts();
             } catch (error) {
                 if (error.response.status === 422) {
                     this.authErrors = error.response.data.errors;

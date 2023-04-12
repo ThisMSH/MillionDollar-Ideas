@@ -25,7 +25,8 @@ class PostsResource extends JsonResource
             ],
             'relationships' => [
                 'creator' => $this->user->name,
-                'category' => $this->category->Category
+                'category' => $this->category->Category,
+                'category_id' => $this->category->id,
             ]
         ];
     }
