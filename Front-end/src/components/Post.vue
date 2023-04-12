@@ -1,10 +1,10 @@
 <script setup>
-const props = defineProps(["title", "topic", "category", "creator"]);
+const props = defineProps(["title", "topic", "category", "creator", "image"]);
 </script>
 
 <template>
   <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-2xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-    <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="https://flowbite.com/docs/images/blog/image-4.jpg" alt="">
+    <img v-if="image != 'http://localhost:8000/storage'" class="object-cover w-full rounded-t-lg h-96 md:h-72 md:w-48 md:rounded-none md:rounded-l-lg" :src="image" :alt="title">
     <div class="flex flex-col justify-between p-4 leading-normal">
       <div>
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ title }}</h5>

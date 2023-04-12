@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useAuthStore } from '../../stores/auth';
+import { onMounted } from 'vue';
+import { initModals } from 'flowbite';
 
 const authStore = useAuthStore();
 
@@ -11,6 +13,10 @@ const form = ref({
   password: "",
   confirm_password: ""
 });
+
+onMounted(() => {
+    initModals();
+})
 </script>
 
 <template>

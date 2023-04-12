@@ -25,7 +25,7 @@ class PostsController extends Controller
     {
         return $this->success(
             PostsResource::collection(
-                Posts::with('category', 'user')->get()
+                Posts::with('category', 'user')->orderByDesc('id')->get()
             )
         );
     }
@@ -35,6 +35,7 @@ class PostsController extends Controller
      */
     public function store(StorePostsRequest $request)
     {
+        dump($request);
         $request->validated($request->all());
         
         // Image name
