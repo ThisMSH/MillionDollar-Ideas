@@ -25,7 +25,7 @@ class PostsController extends Controller
     {
         return $this->success(
             PostsResource::collection(
-                Posts::with('category', 'user')->orderByDesc('id')->get()
+                Posts::with('category', 'user')->withCount('comments')->orderByDesc('id')->get()
             )
         );
     }
@@ -69,7 +69,15 @@ class PostsController extends Controller
      */
     public function show(Posts $post)
     {
-        $comments = $post->comments()->with('user')->orderByDesc('id')->get();
+        $comments = $post->comments()
+            ->with('user')
+            ->withCount('likes')
+            ->with(['likes' => function ($query) {
+                $query->where('User_id', Auth::id());
+            }])
+            ->orderByDesc('id')->get();
+
+        // dump($comments);
         
         return $this->success([
             'post' => new PostsResource($post),

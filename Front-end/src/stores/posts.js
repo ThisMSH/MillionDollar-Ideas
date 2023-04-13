@@ -8,7 +8,7 @@ export const usePostsStore = defineStore('posts', {
         allPosts: null,
         postsOfCategory: null,
         loading: null,
-        updated: null,
+        updated: 0,
     }),
     getters: {
         posts: (state) => state.allPosts,
@@ -37,7 +37,7 @@ export const usePostsStore = defineStore('posts', {
                 // await axios.post("/api/posts", form);
                 const closeButton = document.querySelector('#defaultModal [data-modal-toggle]');
                 closeButton.click();
-                this.router.push("/post/" + postCreated.data.data.id);
+                this.router.push(`/post/${postCreated.data.data.id}`);
                 await this.getAllPosts();
             } catch (e) {
                 if (e.response.status === 422) {
@@ -46,7 +46,7 @@ export const usePostsStore = defineStore('posts', {
             }
         },
         async getPost(id) {
-            const postData = await axios.get("/api/posts/" + id);
+            const postData = await axios.get(`/api/posts/${id}`);
             this.singlePost = postData.data.data;
         },
         async updatePost(data) {
@@ -67,15 +67,29 @@ export const usePostsStore = defineStore('posts', {
             };
 
             try {
-                await axios.patch("/api/posts/"  + data.id, form2);
+                await axios.patch(`/api/posts/${data.id}`, form2);
                 const closeButton = document.querySelector('#defaultModalUpdate [data-modal-toggle]');
                 closeButton.click();
-                this.updated = true;
+                this.updated++;
             } catch (e) {
                 if (e.response.status === 422) {
                     this.error = e.response.data.errors;
                 }
             }
         },
+        async deletePost(id) {
+            this.error = [];
+
+            try {
+                await axios.delete(`/api/posts/${id}`);
+                const closeButton = document.querySelector('#popup-modal [data-modal-hide]');
+                closeButton.click();
+                this.router.push("/");
+            } catch (e) {
+                if (e.response.status === 422) {
+                    this.error = e.response.data.errors;
+                }
+            }
+        }
     }
 })

@@ -33,8 +33,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/comment', [CommentsController::class, 'store']);
     Route::patch('/comment/{comment}', [CommentsController::class, 'update']);
     Route::delete('/comment/{comment}', [CommentsController::class, 'destroy']);
-});
 
+    // Likes
+    Route::resource('like', LikesController::class);
+});
 
 // Posts
 Route::get('/posts', [PostsController::class, 'index']);
@@ -44,7 +46,3 @@ Route::get('/category/{id}', [PostsController::class, 'filter']);
 
 // Categories
 Route::get('/categories', [CategoriesController::class, 'index']);
-
-// Likes
-Route::post('/like', [LikesController::class, 'store']);
-

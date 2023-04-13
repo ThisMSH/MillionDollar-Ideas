@@ -29,6 +29,7 @@ class PostsResource extends JsonResource
                 'category' => $this->category->Category,
                 'category_id' => $this->category->id,
                 'user_id' => $this->user->id,
+                'comments_count' => $this->comments_count,
             ]
         ];
     }

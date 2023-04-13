@@ -22,7 +22,9 @@ class CommentsResource extends JsonResource
                 'created_at' => $this->created_at
             ],
             'relationships' => [
-                'creator' => $this->user->name
+                'creator' => $this->user->name,
+                'like_id' => $this->likes[0]->id ?? null,
+                'likes_count' => $this->likes_count
             ]
         ];
     }

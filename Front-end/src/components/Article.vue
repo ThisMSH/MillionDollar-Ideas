@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps } from 'vue';
 import { useAuthStore } from '../stores/auth';
+import DeletePost from './modal/DeletePost.vue';
 import UpdatePost from './modal/UpdatePost.vue';
 
 const props = defineProps(["post"]);
@@ -11,7 +12,8 @@ const authUser = useAuthStore();
     <div class="pt-10 px-2 mb-10">
         <div class="flex justify-between">
             <h1 class="text-3xl font-extrabold leading-tight text-gray-900 lg:text-4xl dark:text-white">{{ post.attributes.title }}</h1>
-            <div v-show="authUser.user && authUser.user.id == post.relationships.user_id">
+            <div class="flex gap-x-5" v-show="authUser.user && authUser.user.id == post.relationships.user_id">
+                <DeletePost :post_id="post.id" />
                 <UpdatePost :postData="post" />
             </div>
         </div>

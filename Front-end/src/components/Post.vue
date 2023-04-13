@@ -1,5 +1,7 @@
 <script setup>
-const props = defineProps(["title", "topic", "category", "creator", "image"]);
+import { Icon } from '@iconify/vue';
+
+const props = defineProps(["title", "topic", "category", "creator", "image", "comments_count"]);
 </script>
 
 <template>
@@ -11,8 +13,9 @@ const props = defineProps(["title", "topic", "category", "creator", "image"]);
       </div>
       <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 line-clamp-3">{{ topic }}</p>
       <div class="flex flex-row-reverse justify-between">
-        <div class="inline-block">
-          <span class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">{{ category }}</span>
+        <div class="inline-flex gap-x-5 flex-row-reverse">
+          <span class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">{{ category }}</span>
+          <span class="flex text-gray-800 text-sm font-medium px-2.5 py-0.5 dark:text-gray-400"><Icon icon="fa6-solid:comments" class="mr-1" /> {{ comments_count }} comments</span>
         </div>
         <div class="inline-block text-xs text-gray-700 dark:text-gray-400">
           <p>Created by: {{ creator }}</p>
