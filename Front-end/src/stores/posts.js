@@ -8,11 +8,13 @@ export const usePostsStore = defineStore('posts', {
         allPosts: null,
         postsOfCategory: null,
         loading: null,
+        updated: null,
     }),
     getters: {
         posts: (state) => state.allPosts,
         post: (state) => state.singlePost,
         loadingState: (state) => state.loading,
+        update: (state) => state.updated,
     },
     actions: {
         async getAllPosts() {
@@ -29,9 +31,6 @@ export const usePostsStore = defineStore('posts', {
             form1.append("Category_id", data.Category_id);
             form1.append("Image", data.Image);
             form1.append("Topic", data.Topic);
-
-            console.log(form1);
-            console.log(data);
 
             try {
                 const postCreated = await axios.post("/api/posts", form1);
@@ -59,6 +58,7 @@ export const usePostsStore = defineStore('posts', {
             // form2.append("Category_id", data.Category_id);
             // form2.append("Image", data.Image);
 
+
             const form2 = {
                 Title: data.Title,
                 Topic: data.Topic,
@@ -66,14 +66,11 @@ export const usePostsStore = defineStore('posts', {
                 Image: data.Image
             };
 
-            // console.log(form2);
-            // console.log(data);
-
             try {
                 await axios.patch("/api/posts/"  + data.id, form2);
                 const closeButton = document.querySelector('#defaultModalUpdate [data-modal-toggle]');
                 closeButton.click();
-                // return true;
+                this.updated = true;
             } catch (e) {
                 if (e.response.status === 422) {
                     this.error = e.response.data.errors;

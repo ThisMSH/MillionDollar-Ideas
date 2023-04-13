@@ -100,7 +100,21 @@ class PostsController extends Controller
 
         $request->validated($request->all());
 
-        $post->update($request->all());
+        // Image name
+        if ($request->hasFile('Image')) {
+            $imageName = "posts/" . time() . "-" . Str::random(5) . "." . $request->Image->getClientOriginalExtension();
+
+            Storage::disk('public')->put($imageName, file_get_contents($request->Image)); // Saving the image in the storage folder server side
+        } else {
+            $imageName = "";
+        }
+
+        $post->update([
+            'Title' => $request->Title,
+            'Topic' => $request->Topic,
+            'Image' => $imageName,
+            'Category_id' => $request->Category_id,
+        ]);
 
         return $this->success(new PostsResource($post));
     }

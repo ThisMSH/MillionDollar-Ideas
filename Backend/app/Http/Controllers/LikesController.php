@@ -3,56 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Likes;
+use App\Models\Posts;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
 class LikesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    use HttpResponses;
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Likes $likes)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Likes $likes)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Likes $likes)
-    {
-        //
+        $post = Posts::find($id);
+        $post->likes()->create(["user_id" => Auth::user()->id, "post_id" => $post->id]);
+        return $this->sendResponse(new LikesResource($post), 'Like created successfully.', 201);
     }
 
     /**
@@ -60,6 +26,12 @@ class LikesController extends Controller
      */
     public function destroy(Likes $likes)
     {
-        //
+        $like = Like::findOrFail($id);
+        if ($like->user_id == Auth::user()->id) {
+            $like->delete();
+            return $this->sendResponse([], 'Like deleted successfully.', 202);
+        } else {
+            return $this->sendError('Invalid credentials.', ['error' => "Like doesn't belongs to this user"]);
+        }
     }
 }

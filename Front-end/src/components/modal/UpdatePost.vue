@@ -18,6 +18,14 @@ const form = ref({
     id: props.postData.id,
 });
 
+// const form = ref({
+//     Title: "",
+//     Category_id: "",
+//     Image: "",
+//     Topic: "",
+//     id: props.postData.id,
+// });
+
 const handleImage = (event) => {
     form.value.Image = event.target.files[0];
 };

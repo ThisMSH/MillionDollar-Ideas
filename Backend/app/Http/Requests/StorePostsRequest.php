@@ -24,7 +24,7 @@ class StorePostsRequest extends FormRequest
         return [
             'Title' => ['required', 'string', 'max:255'],
             'Topic' => ['required', 'string', 'max:2000'],
-            'Image' => ['sometimes', 'image', 'mimes:png,jpeg,jpg', 'max:2048'],
+            'Image' => ['sometimes', 'nullable', 'image', 'mimes:png,jpeg,jpg', 'max:2048'],
             'Category_id' => ['required', 'integer'],
         ];
     }
