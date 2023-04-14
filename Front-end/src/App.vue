@@ -2,16 +2,16 @@
 import { RouterLink, RouterView } from 'vue-router';
 import { onMounted } from 'vue';
 import { initFlowbite } from 'flowbite';
-// import { useAuthStore } from './stores/auth';
-
+import { useAuthStore } from './stores/auth';
 import Header from "./components/Header.vue";
 import Sidebar from "./components/Sidebar.vue";
 import Footer from "./components/Footer.vue";
-// const authStore = useAuthStore();
+
+const authStore = useAuthStore();
 
 onMounted(async () => {
     initFlowbite();
-    // await authStore.getUser();
+    await authStore.getUser();
 });
 </script>
 

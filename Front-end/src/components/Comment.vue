@@ -48,7 +48,7 @@ const formattedDate = formatDistanceToNow(date);
       {{ comment.attributes.comment }}
     </p>
     <div class="mt-3 flex items-end gap-x-5">
-        <Like @click="toggleLike" class="w-8" :checked="commentsStore.liked" />
+        <Like @click.prevent="toggleLike" class="w-8" :checked="commentsStore.liked" />
         <span class="flex text-gray-800 text-sm font-medium px-2.5 py-0.5 dark:text-gray-400">{{ likesCount }} Likes</span>
     </div>
   </article>

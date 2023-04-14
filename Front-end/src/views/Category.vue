@@ -21,7 +21,7 @@ onMounted(async () => {
 <template>
   <Welcome />
     <RouterLink v-if="getPosts.posts" v-for="post in filteredPosts" :key="post.id" :to="{ name: 'post', params: { id: post.id } }" class="mx-auto">
-        <Post :title="post.attributes.title" :topic="post.attributes.topic" :category="post.relationships.category" :creator="post.relationships.creator" />
+        <Post :title="post.attributes.title" :topic="post.attributes.topic" :category="post.relationships.category" :creator="post.relationships.creator" :image="post.attributes.image" :comments_count="post.relationships.comments_count" />
     </RouterLink>
     <Skeleton v-else class="mx-auto" />
 </template>

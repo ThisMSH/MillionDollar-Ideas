@@ -65,6 +65,12 @@ export const usePostsStore = defineStore('posts', {
                 Category_id: data.Category_id,
                 Image: data.Image
             };
+            console.log(data.Image);
+            // const form2 = new FormData()
+            // form2.append("Title", data.Title)
+            // form2.append("Topic", data.Topic)
+            // form2.append("Category_id", data.Category_id)
+            // form2.append("Image", data.Image)
 
             try {
                 await axios.patch(`/api/posts/${data.id}`, form2);

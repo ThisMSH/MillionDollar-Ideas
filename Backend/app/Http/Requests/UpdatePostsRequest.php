@@ -24,7 +24,7 @@ class UpdatePostsRequest extends FormRequest
         return [
             'Title' => ['required', 'string', 'max:255'],
             'Topic' => ['required', 'string', 'max:2000'],
-            'Image' => ['sometimes', 'nullable', 'image', 'mimes:png,jpeg,jpg', 'max:2048'],
+            'Image' => ['sometimes', 'nullable', 'file', 'mimes:png,jpeg,jpg', 'max:2048'],
             'Category_id' => ['sometimes', 'integer'],
         ];
     }

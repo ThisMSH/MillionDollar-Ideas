@@ -35,7 +35,7 @@ class PostsController extends Controller
      */
     public function store(StorePostsRequest $request)
     {
-        dump($request);
+        // dump($request);
         $request->validated($request->all());
         
         // Image name
@@ -45,7 +45,7 @@ class PostsController extends Controller
             // $request->Image->move(dirname(base_path()) . '\Front-end\src\assets\uploads', $image); // To move the uploaded image to the frontend (bad method)
             Storage::disk('public')->put($imageName, file_get_contents($request->Image)); // Saving the image in the storage folder server side
         } else {
-            $imageName = "";
+            $imageName = null;
         }
         
         // Insert ID of the user
@@ -114,7 +114,7 @@ class PostsController extends Controller
 
             Storage::disk('public')->put($imageName, file_get_contents($request->Image)); // Saving the image in the storage folder server side
         } else {
-            $imageName = "";
+            $imageName = null;
         }
 
         $post->update([
